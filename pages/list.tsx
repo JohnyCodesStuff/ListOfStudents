@@ -2,6 +2,8 @@
 import type { NextPage, GetServerSideProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
 import { prisma } from '../lib/prisma'
 import styles from '../styles/Home.module.css'
 
@@ -19,6 +21,32 @@ type Props = {
 }
 
 const StudentsList: NextPage<Props> = ({ students }) => {
+  const router = useRouter()
+  const [isDeleting, setIsDeleting] = useState<number | null>(null)
+
+  const handleDelete = async (studentId: number) => {
+    if (!confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
+      return
+    }
+
+    setIsDeleting(studentId)
+    try {
+      const response = await fetch(`/api/students/${studentId}`, {
+        method: 'DELETE',
+      })
+
+      if (response.ok) {
+        router.reload()
+      } else {
+        alert('Failed to delete student')
+      }
+    } catch (error) {
+      alert('An error occurred while deleting the student')
+    } finally {
+      setIsDeleting(null)
+    }
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -141,6 +169,18 @@ const StudentsList: NextPage<Props> = ({ students }) => {
                     }}>
                       Field of Study
                     </th>
+                    <th style={{ 
+                      padding: '1rem', 
+                      textAlign: 'center', 
+                      fontSize: '0.875rem', 
+                      fontWeight: '600', 
+                      color: '#374151',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.05em',
+                      borderBottom: '1px solid #eaeaea'
+                    }}>
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -194,6 +234,48 @@ const StudentsList: NextPage<Props> = ({ students }) => {
                         color: '#6b7280' 
                       }}>
                         {student.fieldOfStudy || 'N/A'}
+                      </td>
+                      <td style={{ 
+                        padding: '1rem', 
+                        textAlign: 'center' 
+                      }}>
+                        <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center' }}>
+                          <Link
+                            href={`/edit-student/${student.id}`}
+                            style={{
+                              backgroundColor: '#fbbf24',
+                              color: 'white',
+                              padding: '0.375rem 0.75rem',
+                              borderRadius: '4px',
+                              textDecoration: 'none',
+                              fontSize: '0.75rem',
+                              fontWeight: '500',
+                              transition: 'background-color 0.15s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f59e0b'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fbbf24'}
+                          >
+                            Edit
+                          </Link>
+                          <button
+                            onClick={() => handleDelete(student.id)}
+                            style={{
+                              backgroundColor: '#ef4444',
+                              color: 'white',
+                              padding: '0.375rem 0.75rem',
+                              border: 'none',
+                              borderRadius: '4px',
+                              fontSize: '0.75rem',
+                              fontWeight: '500',
+                              cursor: 'pointer',
+                              transition: 'background-color 0.15s ease'
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#dc2626'}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ef4444'}
+                          >
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
