@@ -2,8 +2,9 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
-import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { useState } from 'react'
+import styles from '../styles/Home.module.css'
 
 const AddStudent: NextPage = () => {
   const router = useRouter()
@@ -53,134 +54,225 @@ const AddStudent: NextPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={styles.container}>
       <Head>
         <title>Add Student</title>
         <meta name="description" content="Add a new student" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Add New Student</h1>
-            <Link 
-              href="/list" 
-              className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors"
+      <main className={styles.main}>
+        <h1 className={styles.title}>Add New Student</h1>
+        
+        <p className={styles.description}>
+          Fill in the details below to register a new student.
+        </p>
+
+        <div style={{ 
+          width: '100%', 
+          maxWidth: '500px', 
+          backgroundColor: 'white', 
+          borderRadius: '10px', 
+          border: '1px solid #eaeaea',
+          padding: '2rem',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
+        }}>
+          {error && (
+            <div style={{ 
+              backgroundColor: '#fee2e2', 
+              border: '1px solid #fecaca', 
+              color: '#dc2626', 
+              padding: '0.75rem', 
+              borderRadius: '5px', 
+              marginBottom: '1rem',
+              fontSize: '0.875rem'
+            }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '0.875rem', 
+                fontWeight: '500', 
+                color: '#374151', 
+                marginBottom: '0.5rem' 
+              }}>
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '0.875rem', 
+                fontWeight: '500', 
+                color: '#374151', 
+                marginBottom: '0.5rem' 
+              }}>
+                Surname
+              </label>
+              <input
+                type="text"
+                name="surname"
+                value={formData.surname}
+                onChange={handleChange}
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '0.875rem', 
+                fontWeight: '500', 
+                color: '#374151', 
+                marginBottom: '0.5rem' 
+              }}>
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '1rem' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '0.875rem', 
+                fontWeight: '500', 
+                color: '#374151', 
+                marginBottom: '0.5rem' 
+              }}>
+                Date of Birth
+              </label>
+              <input
+                type="date"
+                name="dateOfBirth"
+                value={formData.dateOfBirth}
+                onChange={handleChange}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit'
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{ 
+                display: 'block', 
+                fontSize: '0.875rem', 
+                fontWeight: '500', 
+                color: '#374151', 
+                marginBottom: '0.5rem' 
+              }}>
+                Field of Study
+              </label>
+              <select
+                name="fieldOfStudy"
+                value={formData.fieldOfStudy}
+                onChange={handleChange}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '5px',
+                  fontSize: '1rem',
+                  fontFamily: 'inherit'
+                }}
+              >
+                <option value="">Select a field</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Engineering">Engineering</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Biology">Biology</option>
+                <option value="Business">Business</option>
+                <option value="Economics">Economics</option>
+                <option value="Psychology">Psychology</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                width: '100%',
+                backgroundColor: isSubmitting ? '#9ca3af' : '#0070f3',
+                color: 'white',
+                padding: '0.75rem 1.5rem',
+                border: 'none',
+                borderRadius: '5px',
+                fontSize: '1rem',
+                fontWeight: '500',
+                cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                transition: 'background-color 0.15s ease',
+                fontFamily: 'inherit'
+              }}
+              onMouseEnter={(e) => {
+                if (!isSubmitting) {
+                  e.currentTarget.style.backgroundColor = '#0051a3'
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (!isSubmitting) {
+                  e.currentTarget.style.backgroundColor = '#0070f3'
+                }
+              }}
             >
-              Back to List
-            </Link>
-          </div>
+              {isSubmitting ? 'Adding Student...' : 'Add Student'}
+            </button>
+          </form>
+        </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                  Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="surname" className="block text-sm font-medium text-gray-700 mb-2">
-                  Surname *
-                </label>
-                <input
-                  type="text"
-                  id="surname"
-                  name="surname"
-                  value={formData.surname}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-2">
-                  Date of Birth
-                </label>
-                <input
-                  type="date"
-                  id="dateOfBirth"
-                  name="dateOfBirth"
-                  value={formData.dateOfBirth}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-
-              <div>
-                <label htmlFor="fieldOfStudy" className="block text-sm font-medium text-gray-700 mb-2">
-                  Field of Study
-                </label>
-                <select
-                  id="fieldOfStudy"
-                  name="fieldOfStudy"
-                  value={formData.fieldOfStudy}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                >
-                  <option value="">Select a field</option>
-                  <option value="Computer Science">Computer Science</option>
-                  <option value="Mathematics">Mathematics</option>
-                  <option value="Physics">Physics</option>
-                  <option value="Chemistry">Chemistry</option>
-                  <option value="Biology">Biology</option>
-                  <option value="Engineering">Engineering</option>
-                  <option value="Medicine">Medicine</option>
-                  <option value="Business">Business</option>
-                  <option value="Psychology">Psychology</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-                  {error}
-                </div>
-              )}
-
-              <div className="flex gap-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300 text-white px-4 py-2 rounded-lg transition-colors"
-                >
-                  {isSubmitting ? 'Adding Student...' : 'Add Student'}
-                </button>
-                <Link
-                  href="/list"
-                  className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors text-center"
-                >
-                  Cancel
-                </Link>
-              </div>
-            </form>
-          </div>
+        <div style={{ marginTop: '2rem' }}>
+          <Link href="/list" className={styles.card} style={{ maxWidth: '200px', textAlign: 'center' }}>
+            <h2>&larr; Back to List</h2>
+            <p>Return to students list.</p>
+          </Link>
         </div>
       </main>
     </div>
