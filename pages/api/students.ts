@@ -17,7 +17,7 @@ export default async function handler(
 ) {
   if (req.method === 'GET') {
     try {
-      const students = await prisma.user.findMany({
+      const studentsRaw = await prisma.user.findMany({
         select: {
           id: true,
           email: true,
@@ -30,6 +30,13 @@ export default async function handler(
           name: 'asc'
         }
       })
+
+      const students: Student[] = studentsRaw.map((student) => ({
+        ...student,
+        dateOfBirth: student.dateOfBirth ? student.dateOfBirth.toISOString().split('T')[0] : null
+      })
+      )
+
       res.status(200).json(students)
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch students' })
@@ -50,7 +57,7 @@ export default async function handler(
         fieldOfStudy: fieldOfStudy || null
       }
 
-      const student = await prisma.user.create({
+      const studentRaw = await prisma.user.create({
         data: studentData,
         select: {
           id: true,
@@ -61,8 +68,13 @@ export default async function handler(
           fieldOfStudy: true
         }
       })
+      
+      const serializedStudent: Student = {
+        ...studentRaw,
+        dateOfBirth: studentRaw.dateOfBirth ? studentRaw.dateOfBirth.toISOString().split('T')[0] : null
+      }
 
-      res.status(201).json(student)
+      res.status(201).json(serializedStudent)
     } catch (error: any) {
       if (error.code === 'P2002') {
         res.status(409).json({ error: 'A student with this email already exists' })
