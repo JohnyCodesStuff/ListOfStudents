@@ -8,6 +8,9 @@ type Student = {
   id: number
   email: string
   name: string | null
+  surname: string | null
+  dateOfBirth: string | null
+  fieldOfStudy: string | null
 }
 
 type Props = {
@@ -24,15 +27,23 @@ const StudentsList: NextPage<Props> = ({ students }) => {
       </Head>
 
       <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h1 className="text-3xl font-bold text-gray-900">Students List</h1>
-            <Link 
-              href="/" 
-              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
-            >
-              Back to Home
-            </Link>
+            <div className="space-x-4">
+              <Link 
+                href="/add-student" 
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Add Student
+              </Link>
+              <Link 
+                href="/" 
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors"
+              >
+                Back to Home
+              </Link>
+            </div>
           </div>
 
           {students.length === 0 ? (
@@ -53,7 +64,16 @@ const StudentsList: NextPage<Props> = ({ students }) => {
                         Name
                       </th>
                       <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Surname
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Email
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date of Birth
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Field of Study
                       </th>
                     </tr>
                   </thead>
@@ -64,10 +84,19 @@ const StudentsList: NextPage<Props> = ({ students }) => {
                           {student.id}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                          {student.name || 'No name provided'}
+                          {student.name || 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {student.surname || 'N/A'}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {student.email}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {student.dateOfBirth ? new Date(student.dateOfBirth).toLocaleDateString() : 'N/A'}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {student.fieldOfStudy || 'N/A'}
                         </td>
                       </tr>
                     ))}
@@ -94,7 +123,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
       select: {
         id: true,
         email: true,
-        name: true
+        name: true,
+        surname: true,
+        dateOfBirth: true,
+        fieldOfStudy: true
       },
       orderBy: {
         name: 'asc'
