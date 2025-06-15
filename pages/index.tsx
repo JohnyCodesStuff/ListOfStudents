@@ -14,8 +14,10 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>Welcome to the Student List</h1>
+        <h1 className={styles.title}>Welcome to the Student List App</h1>
 
+        
+        <p className={styles.description}>This app allows you to add, edit, view, and delete student data in a simple user interface.</p>
         <p className={styles.description}>
           Get started by moving to{" "}
           <code className={styles.code}>/list page or click a button below</code>
@@ -26,15 +28,12 @@ const Home: NextPage = () => {
             <h2>Students List &rarr;</h2>
             <p>View and manage  all registered students in the system.</p>
           </Link>
-
-          <Link href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </Link>
-
-          
-
-          
+        </div>
+        <div className={styles.description}>
+        <p>Technologies used in this project:</p>
+          <p>Frontend: React</p>
+          <p>Backend: Next.js</p>
+          <p>DB: Prisma</p>
         </div>
       </main>
     </div>
